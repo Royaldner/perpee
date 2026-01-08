@@ -2,6 +2,84 @@
 
 ---
 
+## [2026-01-08 Session 4]
+
+### Changes
+- **Phase 2 Plan Alignment**: Fixed deviations from IMPLEMENTATION_PLAN.md
+- Added critical rule to CLAUDE.md to never deviate from original plan
+- Created missing files per plan specification:
+  - `validators.py` - URL format validation, domain whitelist, private IP blocking
+  - `sanitization.py` - HTML stripping, XSS prevention, price normalization
+- Integrated Crawl4AI native components:
+  - Added Crawl4AI RateLimiter integration to `rate_limiter.py`
+  - Configured MemoryAdaptiveDispatcher in `engine.py` (3 browsers, 70% memory)
+  - Added batch scraping method using `arun_many()` with dispatcher
+  - Integrated Crawl4AI native `check_robots_txt` in `robots.py`
+- Updated `__init__.py` exports for new modules
+
+### Files Created
+- `backend/src/scraper/validators.py` - URL validation and SSRF protection
+- `backend/src/scraper/sanitization.py` - Content sanitization utilities
+
+### Files Modified
+- `CLAUDE.md` - Added critical rule about plan adherence
+- `backend/src/scraper/rate_limiter.py` - Added Crawl4AI RateLimiter integration
+- `backend/src/scraper/engine.py` - Added MemoryAdaptiveDispatcher and batch scraping
+- `backend/src/scraper/robots.py` - Added Crawl4AI native robots.txt functions
+- `backend/src/scraper/__init__.py` - Updated exports
+
+### Notes
+- All 87 tests passing, ruff linting clean
+- Phase 2 now fully aligned with IMPLEMENTATION_PLAN.md
+- Ready for Phase 3 (RAG System)
+
+---
+
+## [2026-01-08 Session 3]
+
+### Changes
+- **Phase 2 Scraper Engine Complete**: Implemented all 7 sections of Phase 2
+- Created extraction strategies module:
+  - `JsonLdStrategy` - Extract from JSON-LD structured data
+  - `CssSelectorStrategy` - Extract using store-specific CSS selectors
+  - `XPathStrategy` - Fallback XPath extraction
+  - `LlmExtractionStrategy` - Placeholder for LLM-based extraction
+- Implemented ScraperEngine class with waterfall extraction (JSON-LD -> CSS -> XPath -> LLM)
+- Created rate limiting system:
+  - Global rate limit (10 scrapes/minute)
+  - Per-store rate limits (configurable)
+  - Async-safe with semaphore-based concurrency control
+- Implemented retry strategy:
+  - Error categorization (network, timeout, blocked, etc.)
+  - Exponential backoff with configurable delays
+  - Category-specific retry rules (no retry for 404, limited for 403)
+- Created block detection module:
+  - CAPTCHA detection (reCAPTCHA, hCAPTCHA, etc.)
+  - Bot detection patterns (Cloudflare, Akamai, etc.)
+  - Rate limit detection (429, patterns)
+  - Login wall detection, geo-blocking, age gate
+- Implemented robots.txt handler with caching
+- Created user agent rotation utility with failure-based rotation
+- Wrote 37 unit tests for all scraper components
+
+### Files Created
+- `backend/src/scraper/strategies.py` - Extraction strategies
+- `backend/src/scraper/engine.py` - Main ScraperEngine class
+- `backend/src/scraper/rate_limiter.py` - Rate limiting
+- `backend/src/scraper/retry.py` - Retry with exponential backoff
+- `backend/src/scraper/block_detection.py` - Block detection
+- `backend/src/scraper/robots.py` - robots.txt handling
+- `backend/src/scraper/user_agent.py` - User agent management
+- `backend/src/scraper/__init__.py` - Public API exports
+- `backend/tests/test_scraper.py` - 37 unit tests
+
+### Notes
+- All 87 tests passing (50 from Phase 1 + 37 from Phase 2)
+- Ruff linting clean
+- Ready for Phase 3 (RAG System)
+
+---
+
 ## [2026-01-08 Session 2]
 
 ### Changes

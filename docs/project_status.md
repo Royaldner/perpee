@@ -6,23 +6,35 @@
 
 ## Current Phase
 
-**Phase 1: Foundation Complete** - Merged to main.
+**Phase 2: Scraper Engine Complete** - Fully aligned with plan. Ready for Phase 3.
 
 ---
 
 ## Recent Development
 
-### This Session (2026-01-08)
-- **Phase 1 Foundation Complete**: All 6 sections implemented
-- Created GitHub repository and connected local project
-- Implemented backend structure with FastAPI, SQLModel, Pydantic AI
-- Created all database models with soft delete support
-- Set up Alembic migrations for SQLite
-- Implemented security utilities (URL validation, SSRF protection, XSS)
-- Created P0 store seed data (16 Canadian retailers)
-- Set up Docker with Playwright/Chromium
-- 50 tests passing, lint clean
-- PR #1 created: https://github.com/Royaldner/perpee/pull/1
+### This Session (2026-01-08 Session 4)
+- **Phase 2 Plan Alignment**: Fixed all deviations from IMPLEMENTATION_PLAN.md
+- Added critical rule to CLAUDE.md: never deviate from plan without user request
+- Created missing files per plan:
+  - `validators.py` - URL validation, domain whitelist, SSRF protection
+  - `sanitization.py` - HTML stripping, XSS prevention, price normalization
+- Integrated Crawl4AI native components:
+  - Crawl4AI RateLimiter integration
+  - MemoryAdaptiveDispatcher (3 browsers, 70% memory threshold)
+  - Batch scraping with `arun_many()` and dispatcher
+  - Native `check_robots_txt` parameter
+- 87 total tests passing, lint clean
+
+### Previous Session (2026-01-08 Session 3)
+- **Phase 2 Scraper Engine Complete**: All 7 sections implemented
+- Created extraction strategies (JSON-LD, CSS, XPath, LLM placeholder)
+- Implemented ScraperEngine with waterfall extraction and Crawl4AI
+- Built rate limiting system (global + per-store)
+- Created retry strategy with exponential backoff
+- Implemented comprehensive block detection (CAPTCHA, bot detection, rate limits)
+- Added robots.txt handler with caching
+- Created user agent rotation utility
+- 37 new tests, 87 total tests passing, lint clean
 
 ---
 
@@ -63,6 +75,45 @@
   - docker-compose.yml for development
   - Oracle Cloud compatible (900MB memory limit)
 
+### Phase 2: Scraper Engine - COMPLETE
+- [x] **2.1 Scraper Core**
+  - ScraperEngine class with async scrape method
+  - Waterfall extraction: JSON-LD -> CSS -> XPath -> LLM
+  - Crawl4AI browser configuration (stealth mode)
+
+- [x] **2.2 Rate Limiting & Concurrency**
+  - Per-store rate limiting
+  - Global rate limit: 10 scrapes/minute
+  - Semaphore-based concurrency (3 concurrent browsers)
+
+- [x] **2.3 Retry Strategy & Block Detection**
+  - Retry matrix implementation
+  - Error categorization (network, timeout, blocked, etc.)
+  - Exponential backoff with jitter
+  - CAPTCHA/login wall detection
+  - Bot detection patterns
+
+- [x] **2.4 Timeout Configuration**
+  - 30s request timeout, 2min operation timeout
+  - Per-store wait_for selectors
+
+- [x] **2.5 Validation & Sanitization**
+  - URL validation, domain whitelist
+  - Private IP blocking (SSRF)
+
+- [x] **2.6 User Agent & Headers**
+  - Realistic browser user agents
+  - Proper Accept/Accept-Language headers
+  - User agent rotation with failure tracking
+
+- [x] **2.7 Scraper Tests**
+  - JSON-LD extraction tests
+  - CSS selector tests
+  - Rate limiter tests
+  - Block detection tests
+  - Retry logic tests
+  - User agent tests
+
 ### Documentation
 - [x] PRD PERPEE.md - Product requirements
 - [x] TECHNICAL_SPEC PERPEE.md - Technical specification
@@ -75,43 +126,35 @@
 
 ## In Progress
 
-Nothing currently in progress. Ready for Phase 2.
+Nothing currently in progress. Ready for Phase 3.
 
 ---
 
 ## Next Steps
 
-### Phase 2: Scraper Engine
-1. **2.1 Scraper Core**
-   - ScraperEngine class with async scrape method
-   - Waterfall extraction: JSON-LD → CSS → XPath → LLM
-   - Crawl4AI browser configuration
+### Phase 3: RAG System
+1. **3.1 ChromaDB Setup**
+   - RAGService class
+   - ChromaDB client initialization
+   - Collection management
 
-2. **2.2 Rate Limiting & Concurrency**
-   - Per-store rate limiting
-   - Global rate limit: 10 scrapes/minute
-   - MemoryAdaptiveDispatcher (3 concurrent browsers)
+2. **3.2 Embeddings**
+   - OpenAI text-embedding-3-small integration
+   - Batch embedding support
 
-3. **2.3 Retry Strategy & Block Detection**
-   - Retry matrix implementation
-   - CAPTCHA/login wall detection
-   - Progressive evasion
+3. **3.3 Search Implementation**
+   - Semantic search with metadata filters
+   - Hybrid search (embedding + SQLite)
 
-4. **2.4 Timeout Configuration**
-   - 30s request timeout, 2min operation timeout
-   - Per-store wait_for selectors
+4. **3.4 Index Synchronization**
+   - Index on product create
+   - Update on price/stock change
+   - Remove on soft delete
 
-5. **2.5 Validation & Sanitization**
-   - URL validation, domain whitelist
-   - Private IP blocking (SSRF)
-
-6. **2.6 User Agent & Headers**
-   - Realistic browser user agents
-   - Proper Accept/Accept-Language headers
-
-7. **2.7 Scraper Tests**
-   - JSON-LD extraction tests
-   - CSS selector tests for P0 stores
+5. **3.5 RAG Tests**
+   - Embedding generation tests
+   - Semantic search tests
+   - Index sync tests
 
 ---
 
@@ -125,8 +168,9 @@ None at this time.
 
 | Phase | Tests | Status |
 |-------|-------|--------|
-| Phase 1 | 50 tests | ✅ All passing |
-| Phase 2 | - | Not started |
+| Phase 1 | 50 tests | All passing |
+| Phase 2 | 37 tests | All passing |
+| **Total** | **87 tests** | **All passing** |
 
 ---
 
@@ -134,11 +178,14 @@ None at this time.
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
-| Docker timing | Phase 1 | Validate Playwright early (Windows → Linux) |
+| Docker timing | Phase 1 | Validate Playwright early (Windows -> Linux) |
 | P0 Stores | 16 stores | General/Electronics/Grocery per spec |
 | Theme | Soft Periwinkle | Defined palette with dark mode |
 | Migrations | Sync + render_as_batch | SQLite compatibility |
 | Boolean queries | `.is_(True)` | SQLAlchemy/ruff linting compatible |
+| Extraction priority | JSON-LD -> CSS -> XPath -> LLM | Free strategies first, LLM as fallback |
+| Rate limiting | Sliding window | Simple, memory-efficient |
+| Retry strategy | Category-based | Different errors need different handling |
 
 ---
 
@@ -146,7 +193,7 @@ None at this time.
 
 - **GitHub**: https://github.com/Royaldner/perpee
 - **Branch**: main (stable), feature/* (development)
-- **PR #1**: Phase 1 Foundation
+- **PR #1**: Phase 1 Foundation (merged)
 
 ---
 
@@ -159,5 +206,12 @@ None at this time.
 | `backend/src/core/security.py` | URL/SSRF/XSS utilities |
 | `backend/config/stores_seed.py` | P0 store configurations |
 | `backend/config/settings.py` | Pydantic Settings |
+| `backend/src/scraper/engine.py` | Main scraper engine with MemoryAdaptiveDispatcher |
+| `backend/src/scraper/strategies.py` | Extraction strategies (JSON-LD, CSS, XPath, LLM) |
+| `backend/src/scraper/rate_limiter.py` | Rate limiting + Crawl4AI RateLimiter |
+| `backend/src/scraper/block_detection.py` | Block detection |
+| `backend/src/scraper/validators.py` | URL validation, SSRF protection |
+| `backend/src/scraper/sanitization.py` | Content sanitization, XSS prevention |
+| `backend/src/scraper/robots.py` | Robots.txt + Crawl4AI native integration |
 | `IMPLEMENTATION_PLAN.md` | Task breakdown by phase |
 | `referrence/TECHNICAL_SPEC PERPEE.md` | Detailed specs |
