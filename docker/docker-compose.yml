@@ -1,0 +1,66 @@
+# Perpee Docker Compose
+# Basic development configuration
+
+version: "3.8"
+
+services:
+  perpee:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: perpee
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist data (SQLite database, ChromaDB, logs)
+      - perpee_data:/app/data
+      # Optional: Mount source for development (uncomment for hot reload)
+      # - ../backend/src:/app/src:ro
+      # - ../backend/config:/app/config:ro
+    environment:
+      # Application settings
+      - DEBUG=true
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=development
+
+      # Database
+      - DATABASE_URL=sqlite+aiosqlite:///./data/perpee.db
+      - CHROMADB_PATH=./data/chromadb
+
+      # API Keys (passed from host .env)
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - USER_EMAIL=${USER_EMAIL}
+
+      # Model configuration
+      - PRIMARY_MODEL=${PRIMARY_MODEL:-google/gemini-2.0-flash-exp:free}
+      - FALLBACK_MODEL_1=${FALLBACK_MODEL_1:-meta-llama/llama-3.3-70b-instruct:free}
+      - FALLBACK_MODEL_2=${FALLBACK_MODEL_2:-anthropic/claude-3.5-haiku}
+
+      # Rate limits
+      - DAILY_TOKEN_LIMIT=${DAILY_TOKEN_LIMIT:-100000}
+      - MAX_SCRAPES_PER_MINUTE=${MAX_SCRAPES_PER_MINUTE:-10}
+      - MAX_LLM_REQUESTS_PER_MINUTE=${MAX_LLM_REQUESTS_PER_MINUTE:-30}
+
+    # Resource limits (Oracle Cloud free tier compatible: 1GB RAM)
+    deploy:
+      resources:
+        limits:
+          memory: 900M
+        reservations:
+          memory: 512M
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  perpee_data:
+    driver: local
