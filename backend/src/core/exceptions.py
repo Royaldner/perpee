@@ -198,3 +198,32 @@ class ValidationError(PerpeeError):
     """Input validation failed."""
 
     pass
+
+
+# ===========================================
+# RAG Exceptions
+# ===========================================
+
+
+class RAGError(PerpeeError):
+    """Base exception for RAG-related errors."""
+
+    pass
+
+
+class EmbeddingError(RAGError):
+    """Embedding generation failed."""
+
+    pass
+
+
+class SearchError(RAGError):
+    """Semantic search failed."""
+
+    pass
+
+
+class IndexSyncError(RAGError):
+    """Index synchronization failed."""
+
+    pass
