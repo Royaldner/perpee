@@ -15,9 +15,10 @@ Perpee is an AI-powered price monitoring agent for Canadian online retailers. Us
   2. Implement with incremental commits
   3. Run tests, ensure coverage
   4. Self-review, then create PR
-  5. Update docs (changelog, status)
+  5. **Use `/update-docs` skill** to update changelog and status (do NOT manually edit docs)
   6. Merge to main after approval
 - **PRE-IMPLEMENTATION CHECKLIST**: Before writing ANY code for a phase, run `git branch` to confirm you're on the correct feature branch. If on `main`, STOP and create the feature branch first.
+- **DOCUMENTATION UPDATES**: Always use the `/update-docs` skill for updating `docs/change_logs.md` and `docs/project_status.md`. Never manually edit these files.
 
 ## Tech Stack
 
