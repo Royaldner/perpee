@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 1: Foundation Complete** - PR #1 open, awaiting merge to main.
+**Phase 1: Foundation Complete** - Merged to main.
 
 ---
 
@@ -75,9 +75,7 @@
 
 ## In Progress
 
-- **PR #1**: Phase 1 Foundation - awaiting merge to main
-  - Branch: `feature/phase-1-foundation`
-  - URL: https://github.com/Royaldner/perpee/pull/1
+Nothing currently in progress. Ready for Phase 2.
 
 ---
 
