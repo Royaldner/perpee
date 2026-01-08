@@ -6,6 +6,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Perpee is an AI-powered price monitoring agent for Canadian online retailers. Users add products via URL or natural language chat, and Perpee tracks prices, detects changes, and sends email alerts.
 
+## 🚨 CRITICAL RULES
+- Every start of the session, check the docs folder to update me with the status of the project.
+- **NEVER deviate from the IMPLEMENTATION_PLAN.md** - Follow every task exactly as specified. Do not skip files, use alternative implementations, or reuse existing code instead of creating specified files. Only deviate if the user explicitly requests it.
+- When implementing a phase, cross-check each task item against what you've built before marking it complete.
+- **ALWAYS follow the Phase Execution Workflow** from global CLAUDE.md:
+  1. **BEFORE any implementation**: Create feature branch (`feature/phase-X-name`) and verify you're on it
+  2. Implement with incremental commits
+  3. Run tests, ensure coverage
+  4. Self-review, then create PR
+  5. Update docs (changelog, status)
+  6. Merge to main after approval
+- **PRE-IMPLEMENTATION CHECKLIST**: Before writing ANY code for a phase, run `git branch` to confirm you're on the correct feature branch. If on `main`, STOP and create the feature branch first.
+
 ## Tech Stack
 
 | Layer | Technology |
@@ -173,8 +186,9 @@ FALLBACK_MODEL_1=meta-llama/llama-3.3-70b-instruct:free
 FALLBACK_MODEL_2=anthropic/claude-3.5-haiku
 DAILY_TOKEN_LIMIT=100000
 ```
+Copy `.env.example` to `env.local` for local development
 
-## Reference Documentation
+## Documentation
 
 Consult these documents for detailed context when implementing features:
 
@@ -183,10 +197,7 @@ Consult these documents for detailed context when implementing features:
 | `referrence/PRD PERPEE.md` | Product requirements, user stories, feature scope |
 | `referrence/TECHNICAL_SPEC PERPEE.md` | Detailed technical specification, API contracts, data models |
 | `IMPLEMENTATION_PLAN.md` | Step-by-step implementation phases and task breakdown |
-| `docs/project_status.md` | Current state: what's done, in progress, and next steps |
-| `docs/change_logs.md` | Timestamped history of all changes made |
 
-**Session Continuity**: When resuming work, check `docs/project_status.md` first to understand current state. Use `/update-docs` after major milestones to keep these files current.
 
 ## Security Notes
 
