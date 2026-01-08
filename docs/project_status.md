@@ -6,23 +6,29 @@
 
 ## Current Phase
 
-**Phase 2: Scraper Engine Complete** - Fully aligned with plan. Ready for Phase 3.
+**Phase 3: RAG System Complete** - All 5 sections implemented. Ready for Phase 4.
 
 ---
 
 ## Recent Development
 
-### This Session (2026-01-08 Session 4)
+### This Session (2026-01-08 Session 5)
+- **Phase 3 RAG System Complete**: All 5 sections implemented
+- Created RAGService with ChromaDB client and collection management
+- Created EmbeddingService using OpenAI text-embedding-3-small (1536 dims)
+- Implemented ProductSearchService (semantic, hybrid, SQLite fallback)
+- Created IndexSyncService for product CRUD sync operations
+- Added RAG exceptions (EmbeddingError, SearchError, IndexSyncError)
+- 30 new tests, 117 total tests passing, lint clean
+- Followed proper git workflow: feature branch → build → test → document → PR
+
+### Previous Session (2026-01-08 Session 4)
 - **Phase 2 Plan Alignment**: Fixed all deviations from IMPLEMENTATION_PLAN.md
 - Added critical rule to CLAUDE.md: never deviate from plan without user request
 - Created missing files per plan:
   - `validators.py` - URL validation, domain whitelist, SSRF protection
   - `sanitization.py` - HTML stripping, XSS prevention, price normalization
-- Integrated Crawl4AI native components:
-  - Crawl4AI RateLimiter integration
-  - MemoryAdaptiveDispatcher (3 browsers, 70% memory threshold)
-  - Batch scraping with `arun_many()` and dispatcher
-  - Native `check_robots_txt` parameter
+- Integrated Crawl4AI native components
 - 87 total tests passing, lint clean
 
 ### Previous Session (2026-01-08 Session 3)
@@ -114,6 +120,38 @@
   - Retry logic tests
   - User agent tests
 
+### Phase 3: RAG System - COMPLETE
+- [x] **3.1 ChromaDB Setup**
+  - RAGService class with client management
+  - In-memory mode (testing) and persistent mode (production)
+  - Collection management with cosine similarity
+  - Metadata sanitization for ChromaDB
+
+- [x] **3.2 Embeddings**
+  - EmbeddingService with OpenAI text-embedding-3-small
+  - 1536-dimensional embeddings
+  - Batch embedding with automatic chunking
+  - Tenacity retries with exponential backoff
+
+- [x] **3.3 Search Implementation**
+  - Semantic search using ChromaDB
+  - Hybrid search (embedding + SQLite enrichment)
+  - SQLite LIKE fallback when ChromaDB unavailable
+  - Metadata filtering (store, price, stock)
+
+- [x] **3.4 Index Synchronization**
+  - IndexSyncService for CRUD operations
+  - Smart sync based on changed fields
+  - Bulk index/remove operations
+  - Re-embed on name/brand change
+
+- [x] **3.5 RAG Tests**
+  - RAGService tests (10 tests)
+  - Embedding tests (6 tests)
+  - Search tests (9 tests)
+  - Sync tests (3 tests)
+  - Integration tests (2 tests)
+
 ### Documentation
 - [x] PRD PERPEE.md - Product requirements
 - [x] TECHNICAL_SPEC PERPEE.md - Technical specification
@@ -126,35 +164,39 @@
 
 ## In Progress
 
-Nothing currently in progress. Ready for Phase 3.
+Nothing currently in progress. Ready for Phase 4.
 
 ---
 
 ## Next Steps
 
-### Phase 3: RAG System
-1. **3.1 ChromaDB Setup**
-   - RAGService class
-   - ChromaDB client initialization
-   - Collection management
+### Phase 4: Pydantic AI Agent
+1. **4.1 Agent Foundation**
+   - PricingAgent class with Pydantic AI
+   - Agent dependencies (DB session, RAG service, etc.)
+   - System prompt configuration
 
-2. **3.2 Embeddings**
-   - OpenAI text-embedding-3-small integration
-   - Batch embedding support
+2. **4.2 Agent Tools**
+   - `scrape_product` - Extract product data from URL
+   - `search_products` - Search tracked products
+   - `get_price_history` - Query price history
+   - `create_schedule` - Set monitoring schedule
+   - `set_alert` - Configure price alerts
+   - `compare_prices` - Cross-store comparison
 
-3. **3.3 Search Implementation**
-   - Semantic search with metadata filters
-   - Hybrid search (embedding + SQLite)
+3. **4.3 Conversation Memory**
+   - Window-based (last 15 messages)
+   - Session-only (not persisted)
 
-4. **3.4 Index Synchronization**
-   - Index on product create
-   - Update on price/stock change
-   - Remove on soft delete
+4. **4.4 Model Fallback Chain**
+   - Primary: Gemini 2.0 Flash (free)
+   - Fallback 1: Llama 3.3 70B (free)
+   - Fallback 2: Claude 3.5 Haiku (paid)
 
-5. **3.5 RAG Tests**
-   - Embedding generation tests
-   - Semantic search tests
-   - Index sync tests
+5. **4.5 Agent Tests**
+   - Tool invocation tests
+   - Conversation flow tests
+   - Error handling tests
 
 ---
 
@@ -170,7 +212,8 @@ None at this time.
 |-------|-------|--------|
 | Phase 1 | 50 tests | All passing |
 | Phase 2 | 37 tests | All passing |
-| **Total** | **87 tests** | **All passing** |
+| Phase 3 | 30 tests | All passing |
+| **Total** | **117 tests** | **All passing** |
 
 ---
 
@@ -194,6 +237,8 @@ None at this time.
 - **GitHub**: https://github.com/Royaldner/perpee
 - **Branch**: main (stable), feature/* (development)
 - **PR #1**: Phase 1 Foundation (merged)
+- **PR #2**: Phase 2 Scraper Engine (merged)
+- **PR #3**: Phase 3 RAG System (pending)
 
 ---
 
@@ -213,5 +258,9 @@ None at this time.
 | `backend/src/scraper/validators.py` | URL validation, SSRF protection |
 | `backend/src/scraper/sanitization.py` | Content sanitization, XSS prevention |
 | `backend/src/scraper/robots.py` | Robots.txt + Crawl4AI native integration |
+| `backend/src/rag/service.py` | RAGService with ChromaDB client |
+| `backend/src/rag/embeddings.py` | EmbeddingService with OpenAI |
+| `backend/src/rag/search.py` | ProductSearchService (semantic, hybrid, fallback) |
+| `backend/src/rag/sync.py` | IndexSyncService for CRUD sync |
 | `IMPLEMENTATION_PLAN.md` | Task breakdown by phase |
 | `referrence/TECHNICAL_SPEC PERPEE.md` | Detailed specs |
