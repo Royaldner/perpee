@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(for dir in backend/src backend/src/core backend/src/agent backend/src/scraper backend/src/rag backend/src/scheduler backend/src/notifications backend/src/api backend/src/api/routes backend/src/api/schemas backend/src/database backend/src/utils backend/config backend/tests)",
+      "Bash(do touch \"$dir/__init__.py\")",
+      "Bash(done)",
+      "Bash(uv sync:*)",
+      "Bash(uv run alembic:*)",
+      "Bash(uv run pytest:*)",
+      "Bash(uv run ruff check:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat\\(backend\\): implement Phase 1 foundation\n\n## Summary\n- Set up backend project structure with FastAPI, SQLModel, Pydantic AI\n- Created all database models \\(Product, Store, Alert, Schedule, etc.\\)\n- Configured Alembic migrations with initial schema\n- Implemented core utilities \\(exceptions, constants, security\\)\n- Added P0 store seed data for 16 Canadian retailers\n- Created basic Docker setup with Playwright support\n\n## Details\n### 1.1 Project Initialization\n- Directory structure per tech spec\n- pyproject.toml with all dependencies\n- Pydantic Settings configuration\n- .env.example with all required variables\n\n### 1.2 Database Models \\(SQLModel\\)\n- Product, Store, Alert, Schedule, PriceHistory models\n- ScrapeLog, Notification, CanonicalProduct models\n- Proper enums for status, alert types, strategies\n- Soft delete support with deleted_at\n\n### 1.3 Alembic Migrations\n- SQLite-compatible sync migrations\n- Initial migration with all tables and indexes\n- render_as_batch for SQLite ALTER support\n\n### 1.4 Core Utilities\n- Custom exception hierarchy \\(ScraperError, URLError, etc.\\)\n- App-wide constants \\(rate limits, timeouts, store lists\\)\n- Security utilities \\(URL validation, SSRF protection, XSS sanitization\\)\n\n### 1.5 Store Seed Data\n- 16 P0 Canadian stores configured\n- CSS selectors for price, name, availability\n- JSON-LD support flags\n- Per-store rate limits\n\n### 1.6 Docker Setup\n- Dockerfile with Playwright/Chromium\n- docker-compose.yml for development\n- Oracle Cloud compatible \\(900MB memory limit\\)\n\n## Testing\n- 50 tests covering models, security, constants\n- All tests passing\n- Ruff linting clean\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Skill(update-docs)",
+      "Bash(git commit:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(pushd \"D:\\\\claude\\\\projects\\\\apps\\\\perpee\\\\backend\")",
+      "Bash(pushd \"D:\\\\claude\\\\projects\\\\apps\\\\perpee\")",
+      "Bash(gh pr create --title \"feat\\(scraper\\): implement Phase 2 scraper engine\" --body \"$\\(cat <<''EOF''\n## Summary\n- Implement complete Phase 2 scraper engine with waterfall extraction \\(JSON-LD → CSS → XPath → LLM\\)\n- Add rate limiting, retry logic, block detection, robots.txt compliance, and user agent rotation\n- Integrate Crawl4AI native components \\(RateLimiter, MemoryAdaptiveDispatcher, check_robots_txt\\)\n- Create validators and sanitization modules per IMPLEMENTATION_PLAN.md\n\n## Changes\n\n### Scraper Core\n- `strategies.py` - Extraction strategies \\(JSON-LD, CSS, XPath, LLM placeholder\\)\n- `engine.py` - ScraperEngine with waterfall extraction and MemoryAdaptiveDispatcher\n- `rate_limiter.py` - Global + per-store rate limiting with Crawl4AI RateLimiter integration\n- `retry.py` - Exponential backoff with error categorization\n- `block_detection.py` - CAPTCHA, bot detection, rate limit detection\n- `robots.py` - robots.txt handler with Crawl4AI native check_robots_txt\n- `user_agent.py` - User agent rotation with failure tracking\n\n### Validation & Sanitization\n- `validators.py` - URL validation, domain whitelist, SSRF protection\n- `sanitization.py` - HTML stripping, XSS prevention, price normalization\n\n### Tests\n- 37 new unit tests covering all scraper components\n- 87 total tests passing\n\n### Documentation\n- Updated CLAUDE.md with workflow rules and plan adherence checklist\n- Updated change_logs.md and project_status.md\n\n## Test plan\n- [x] All 87 tests passing \\(`uv run pytest tests/ -v`\\)\n- [x] Ruff lint clean \\(`uv run ruff check .`\\)\n- [x] Verified all IMPLEMENTATION_PLAN.md Phase 2 tasks completed\n\n🤖 Generated with [Claude Code]\\(https://claude.ai/code\\)\nEOF\n\\)\")"
+    ]
+  }
+}
