@@ -1,46 +1,40 @@
 # Perpee Project Status
 
-**Last Updated:** 2026-01-08
+**Last Updated:** 2026-01-09
 
 ---
 
 ## Current Phase
 
-**Phase 3: RAG System Complete** - All 5 sections implemented. Ready for Phase 4.
+**Phase 4: Agent Core Complete** - All 6 sections implemented. Ready for Phase 5.
 
 ---
 
 ## Recent Development
 
-### This Session (2026-01-08 Session 5)
+### This Session (2026-01-09 Session 6)
+- **Phase 4 Agent Core Complete**: All 6 sections implemented
+- Created PerpeeAgent with Pydantic AI and OpenRouter integration
+- Implemented all 10 agent tools for price monitoring operations
+- Created guardrails system (token tracking, rate limiting, timeouts)
+- Added window-based conversation memory (15 messages)
+- Created prompt templates for agent personality and LLM extraction
+- 42 new tests, 159 total tests passing, lint clean
+- Followed proper git workflow: feature branch → build → test → document → PR
+
+### Previous Session (2026-01-08 Session 5)
 - **Phase 3 RAG System Complete**: All 5 sections implemented
 - Created RAGService with ChromaDB client and collection management
 - Created EmbeddingService using OpenAI text-embedding-3-small (1536 dims)
 - Implemented ProductSearchService (semantic, hybrid, SQLite fallback)
 - Created IndexSyncService for product CRUD sync operations
-- Added RAG exceptions (EmbeddingError, SearchError, IndexSyncError)
 - 30 new tests, 117 total tests passing, lint clean
-- Followed proper git workflow: feature branch → build → test → document → PR
 
 ### Previous Session (2026-01-08 Session 4)
 - **Phase 2 Plan Alignment**: Fixed all deviations from IMPLEMENTATION_PLAN.md
-- Added critical rule to CLAUDE.md: never deviate from plan without user request
-- Created missing files per plan:
-  - `validators.py` - URL validation, domain whitelist, SSRF protection
-  - `sanitization.py` - HTML stripping, XSS prevention, price normalization
+- Created validators.py and sanitization.py per plan
 - Integrated Crawl4AI native components
 - 87 total tests passing, lint clean
-
-### Previous Session (2026-01-08 Session 3)
-- **Phase 2 Scraper Engine Complete**: All 7 sections implemented
-- Created extraction strategies (JSON-LD, CSS, XPath, LLM placeholder)
-- Implemented ScraperEngine with waterfall extraction and Crawl4AI
-- Built rate limiting system (global + per-store)
-- Created retry strategy with exponential backoff
-- Implemented comprehensive block detection (CAPTCHA, bot detection, rate limits)
-- Added robots.txt handler with caching
-- Created user agent rotation utility
-- 37 new tests, 87 total tests passing, lint clean
 
 ---
 
@@ -152,6 +146,51 @@
   - Sync tests (3 tests)
   - Integration tests (2 tests)
 
+### Phase 4: Agent Core - COMPLETE
+- [x] **4.1 Agent Configuration**
+  - PerpeeAgent class with Pydantic AI
+  - OpenRouter model configuration (primary + fallbacks)
+  - System prompt from `config/prompts/system.txt`
+  - Conversation memory (window-based, 15 messages)
+
+- [x] **4.2 Agent Tools Implementation**
+  - `scrape_product(url)` - Extract product data, save to DB
+  - `scan_website(url)` - Analyze unknown site structure
+  - `search_products(query, store?)` - RAG search
+  - `web_search(query)` - DuckDuckGo product search
+  - `get_price_history(product_id, days?)` - Query history
+  - `create_schedule(product_id, cron)` - Set monitoring
+  - `set_alert(product_id, alert_type, target_value?)` - Configure alert
+  - `compare_prices(canonical_id)` - Cross-store comparison
+  - `list_products(store?, limit?)` - List tracked products
+  - `remove_product(product_id)` - Soft delete product
+
+- [x] **4.3 Tool Dependencies**
+  - AgentDependencies dataclass for service injection
+  - Factory method with default service creation
+
+- [x] **4.4 Guardrails**
+  - DailyTokenTracker (100k tokens/day)
+  - LLMRateLimiter (30 requests/minute)
+  - InputValidator (token estimation, truncation)
+  - with_timeout decorator (operation timeout)
+
+- [x] **4.5 Prompt Templates**
+  - `system.txt` - Main agent personality
+  - `scan_website.txt` - Website analysis prompt
+  - `extract_product.txt` - LLM extraction prompt
+
+- [x] **4.6 Agent Tests**
+  - Guardrails tests (14 tests)
+  - Conversation memory tests (4 tests)
+  - Tool result types tests (6 tests)
+  - Dependencies tests (2 tests)
+  - Agent response tests (2 tests)
+  - System prompt tests (2 tests)
+  - Integration tests (2 tests)
+  - Edge case tests (4 tests)
+  - Additional tests (6 tests)
+
 ### Documentation
 - [x] PRD PERPEE.md - Product requirements
 - [x] TECHNICAL_SPEC PERPEE.md - Technical specification
@@ -164,39 +203,37 @@
 
 ## In Progress
 
-Nothing currently in progress. Ready for Phase 4.
+Nothing currently in progress. Ready for Phase 5.
 
 ---
 
 ## Next Steps
 
-### Phase 4: Pydantic AI Agent
-1. **4.1 Agent Foundation**
-   - PricingAgent class with Pydantic AI
-   - Agent dependencies (DB session, RAG service, etc.)
-   - System prompt configuration
+### Phase 5: Automation (Self-Healing & Scheduler)
+1. **5.1 Self-Healing Module**
+   - Failure classification (parse_failure, price_validation, structure_change)
+   - Track consecutive failures per product
+   - LLM-based selector regeneration
 
-2. **4.2 Agent Tools**
-   - `scrape_product` - Extract product data from URL
-   - `search_products` - Search tracked products
-   - `get_price_history` - Query price history
-   - `create_schedule` - Set monitoring schedule
-   - `set_alert` - Configure price alerts
-   - `compare_prices` - Cross-store comparison
+2. **5.2 Scheduler Setup**
+   - APScheduler AsyncIOScheduler configuration
+   - SQLAlchemy job store for persistence
+   - Missed job handling
 
-3. **4.3 Conversation Memory**
-   - Window-based (last 15 messages)
-   - Session-only (not persisted)
+3. **5.3 Batch Processing**
+   - Group products by store
+   - Reuse browser session per store
+   - Respect per-store rate limits
 
-4. **4.4 Model Fallback Chain**
-   - Primary: Gemini 2.0 Flash (free)
-   - Fallback 1: Llama 3.3 70B (free)
-   - Fallback 2: Claude 3.5 Haiku (paid)
+4. **5.4 Schedule Triggers**
+   - CRON expression parsing and validation
+   - Minimum interval enforcement (24h MVP)
+   - Schedule hierarchy: product > store > system
 
-5. **4.5 Agent Tests**
-   - Tool invocation tests
-   - Conversation flow tests
-   - Error handling tests
+5. **5.5 Automation Tests**
+   - Failure detection tests
+   - Selector regeneration tests
+   - Job scheduling tests
 
 ---
 
@@ -213,7 +250,8 @@ None at this time.
 | Phase 1 | 50 tests | All passing |
 | Phase 2 | 37 tests | All passing |
 | Phase 3 | 30 tests | All passing |
-| **Total** | **117 tests** | **All passing** |
+| Phase 4 | 42 tests | All passing |
+| **Total** | **159 tests** | **All passing** |
 
 ---
 
@@ -229,6 +267,9 @@ None at this time.
 | Extraction priority | JSON-LD -> CSS -> XPath -> LLM | Free strategies first, LLM as fallback |
 | Rate limiting | Sliding window | Simple, memory-efficient |
 | Retry strategy | Category-based | Different errors need different handling |
+| Agent framework | Pydantic AI | Type-safe, OpenRouter compatible |
+| Token budget | 100k/day | OpenRouter free tier limits |
+| Conversation memory | Window (15 msgs) | Balance context vs tokens |
 
 ---
 
@@ -239,6 +280,7 @@ None at this time.
 - **PR #1**: Phase 1 Foundation (merged)
 - **PR #2**: Phase 2 Scraper Engine (merged)
 - **PR #3**: Phase 3 RAG System (merged)
+- **PR #4**: Phase 4 Agent Core (pending)
 
 ---
 
@@ -262,5 +304,10 @@ None at this time.
 | `backend/src/rag/embeddings.py` | EmbeddingService with OpenAI |
 | `backend/src/rag/search.py` | ProductSearchService (semantic, hybrid, fallback) |
 | `backend/src/rag/sync.py` | IndexSyncService for CRUD sync |
+| `backend/src/agent/agent.py` | PerpeeAgent with Pydantic AI |
+| `backend/src/agent/tools.py` | All 10 agent tools |
+| `backend/src/agent/guardrails.py` | Token/rate limits, timeouts |
+| `backend/src/agent/dependencies.py` | Service injection |
+| `backend/config/prompts/system.txt` | Agent system prompt |
 | `IMPLEMENTATION_PLAN.md` | Task breakdown by phase |
 | `referrence/TECHNICAL_SPEC PERPEE.md` | Detailed specs |

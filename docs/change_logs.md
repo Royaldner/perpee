@@ -2,6 +2,56 @@
 
 ---
 
+## [2026-01-09 Session 6]
+
+### Changes
+- **Phase 4 Agent Core Complete**: Implemented all 6 sections of Phase 4
+- Created PerpeeAgent with Pydantic AI integration:
+  - OpenRouter model configuration for LLM access
+  - Model fallback chain: Gemini 2.0 Flash -> Llama 3.3 70B -> Claude 3.5 Haiku
+  - ConversationMemory with sliding window (15 messages)
+  - PerpeeAgent high-level interface with guardrails integration
+- Implemented all 10 agent tools:
+  - `scrape_product(url)` - Extract product data and save to DB
+  - `scan_website(url)` - Analyze unknown site for scrapeability
+  - `search_products(query, store?)` - RAG semantic search
+  - `web_search(query)` - DuckDuckGo product search
+  - `get_price_history(product_id, days?)` - Query price history
+  - `create_schedule(product_id, cron)` - Set monitoring schedule
+  - `set_alert(product_id, alert_type, target?)` - Configure price alerts
+  - `compare_prices(canonical_id)` - Cross-store comparison
+  - `list_products(store?, limit?)` - List tracked products
+  - `remove_product(product_id)` - Soft delete product
+- Created guardrails system:
+  - DailyTokenTracker - 100k tokens/day budget with daily reset
+  - LLMRateLimiter - 30 requests/minute sliding window
+  - InputValidator - Token estimation and input truncation
+  - with_timeout decorator - Operation timeout enforcement
+- Created AgentDependencies for service injection
+- Created prompt templates (system.txt, scan_website.txt, extract_product.txt)
+- Wrote 42 comprehensive tests for all agent components
+
+### Files Created
+- `backend/src/agent/agent.py` - PerpeeAgent with Pydantic AI
+- `backend/src/agent/tools.py` - All 10 agent tools
+- `backend/src/agent/dependencies.py` - Service injection
+- `backend/src/agent/guardrails.py` - Token/rate limits
+- `backend/config/prompts/system.txt` - Main agent prompt
+- `backend/config/prompts/scan_website.txt` - Website analysis prompt
+- `backend/config/prompts/extract_product.txt` - LLM extraction prompt
+- `backend/tests/test_agent.py` - 42 unit tests
+
+### Files Modified
+- `backend/src/agent/__init__.py` - Updated public exports
+
+### Notes
+- All 159 tests passing (50 P1 + 37 P2 + 30 P3 + 42 P4)
+- Ruff linting clean
+- Followed proper git workflow: feature branch → build → test → document → PR
+- Ready for Phase 5 (Automation - Self-Healing & Scheduler)
+
+---
+
 ## [2026-01-08 Session 5]
 
 ### Changes
