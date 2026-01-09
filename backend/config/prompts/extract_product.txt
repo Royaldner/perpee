@@ -1,0 +1,65 @@
+Extract product information from this e-commerce webpage.
+
+## Your Task
+
+Analyze the HTML content and extract the following product details:
+
+1. **Product Name** (required)
+   - The main product title
+   - Remove any HTML entities or special characters
+
+2. **Current Price** (required)
+   - The selling price in CAD
+   - Return as a number (e.g., 29.99, not "$29.99")
+   - If multiple prices shown, use the final/sale price
+
+3. **Original Price** (optional)
+   - MSRP, "Was" price, or crossed-out price
+   - Return as a number
+
+4. **Availability** (required)
+   - Is the product in stock?
+   - Return as boolean (true/false)
+
+5. **Brand** (optional)
+   - Product brand/manufacturer
+
+6. **Image URL** (optional)
+   - Main product image URL
+   - Should be absolute URL
+
+7. **UPC/SKU** (optional)
+   - Universal Product Code or Stock Keeping Unit
+
+## Response Format
+
+Respond with a JSON object:
+
+```json
+{
+  "name": "Product Name Here",
+  "price": 29.99,
+  "original_price": 39.99,
+  "in_stock": true,
+  "brand": "Brand Name",
+  "image_url": "https://example.com/image.jpg",
+  "upc": "123456789012",
+  "confidence": 0.9
+}
+```
+
+## Important Notes
+
+- Price must be a valid positive number
+- If you cannot find the price with confidence, set confidence below 0.5
+- Availability: assume in stock unless explicitly stated otherwise
+- Clean all text (remove extra whitespace, HTML tags)
+- If the page appears to be an error page or not a product page, return:
+
+```json
+{
+  "error": "Not a product page",
+  "page_type": "error|category|search|other",
+  "confidence": 0.0
+}
+```

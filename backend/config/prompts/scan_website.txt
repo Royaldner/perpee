@@ -1,0 +1,62 @@
+Analyze this webpage to determine if it's a product page from an e-commerce website.
+
+## Your Task
+
+Examine the HTML content and extract:
+
+1. **Is this a product page?** (yes/no)
+   - Look for product indicators: price, add to cart button, product images, product title
+
+2. **Website Information**
+   - Store name
+   - Domain
+   - Country/region (we focus on Canadian stores)
+
+3. **Product Data Selectors** (if product page)
+   Identify CSS selectors or XPath for:
+   - Product name/title
+   - Current price
+   - Original/MSRP price (if shown)
+   - Availability/stock status
+   - Product image
+   - Product description
+   - SKU/UPC (if visible)
+
+4. **Data Format Detection**
+   - Does the page have JSON-LD structured data? (look for <script type="application/ld+json">)
+   - Does it have Open Graph meta tags?
+   - Does it have microdata/schema.org markup?
+
+5. **Technical Notes**
+   - Any dynamic loading (JavaScript-rendered content)?
+   - CAPTCHA or bot protection detected?
+   - Login required?
+
+## Response Format
+
+Respond with a JSON object:
+
+```json
+{
+  "is_product_page": true,
+  "confidence": 0.95,
+  "store": {
+    "name": "Store Name",
+    "domain": "example.com",
+    "country": "Canada"
+  },
+  "has_json_ld": true,
+  "has_open_graph": true,
+  "selectors": {
+    "name": "h1.product-title",
+    "price": "span.price-value",
+    "original_price": "span.was-price",
+    "availability": "div.stock-status",
+    "image": "img.product-image",
+    "description": "div.product-description"
+  },
+  "notes": "Any relevant observations about the page structure"
+}
+```
+
+If not a product page, explain what type of page it is (category, search results, homepage, etc.) and suggest how to find actual product pages.
