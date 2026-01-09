@@ -7,18 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Perpee is an AI-powered price monitoring agent for Canadian online retailers. Users add products via URL or natural language chat, and Perpee tracks prices, detects changes, and sends email alerts.
 
 ## 🚨 CRITICAL RULES
-- Every start of the session, check the docs folder to update me with the status of the project.
+- **Refer to `phase-workflow` skill** skill for the full branch-build-test-review-document-merge cycle.
 - **NEVER deviate from the IMPLEMENTATION_PLAN.md** - Follow every task exactly as specified. Do not skip files, use alternative implementations, or reuse existing code instead of creating specified files. Only deviate if the user explicitly requests it.
 - When implementing a phase, cross-check each task item against what you've built before marking it complete.
-- **ALWAYS follow the Phase Execution Workflow** from global CLAUDE.md:
-  1. **BEFORE any implementation**: Create feature branch (`feature/phase-X-name`) and verify you're on it
-  2. Implement with incremental commits
-  3. Run tests, ensure coverage
-  4. Self-review, then create PR
-  5. **Use `/update-docs` skill** to update changelog and status (do NOT manually edit docs)
-  6. Merge to main after approval
-- **PRE-IMPLEMENTATION CHECKLIST**: Before writing ANY code for a phase, run `git branch` to confirm you're on the correct feature branch. If on `main`, STOP and create the feature branch first.
-- **DOCUMENTATION UPDATES**: Always use the `/update-docs` skill for updating `docs/change_logs.md` and `docs/project_status.md`. Never manually edit these files.
 
 ## Tech Stack
 
