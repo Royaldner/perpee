@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Price Alert - Perpee</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #1e1c4a;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #edecf8;
+    }
+    .container {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(30, 28, 74, 0.1);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: #4b45ba;
+      margin-bottom: 8px;
+    }
+    .alert-badge {
+      display: inline-block;
+      background-color: #22c55e;
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .product-card {
+      background-color: #f8f7fc;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .product-image {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .product-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e1c4a;
+      margin-bottom: 8px;
+    }
+    .store-name {
+      color: #6f6ac8;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    .price-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .current-price {
+      font-size: 32px;
+      font-weight: 700;
+      color: #22c55e;
+    }
+    .original-price {
+      font-size: 18px;
+      color: #938fd6;
+      text-decoration: line-through;
+    }
+    .discount-badge {
+      background-color: #ef4444;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .cta-button {
+      display: inline-block;
+      background-color: #4b45ba;
+      color: white;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      margin-top: 16px;
+    }
+    .cta-button:hover {
+      background-color: #3c3795;
+    }
+    .footer {
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid #dbdaf1;
+      text-align: center;
+      color: #938fd6;
+      font-size: 12px;
+    }
+    .footer a {
+      color: #6f6ac8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">Perpee</div>
+      <span class="alert-badge">{{ alert_type_label }}</span>
+    </div>
+
+    <div class="product-card">
+      {% if image_url %}
+      <img src="{{ image_url }}" alt="{{ product_name }}" class="product-image">
+      {% endif %}
+      <div class="product-name">{{ product_name }}</div>
+      <div class="store-name">{{ store_name }}</div>
+
+      <div class="price-section">
+        <span class="current-price">${{ current_price }}</span>
+        {% if original_price and original_price > current_price %}
+        <span class="original-price">${{ original_price }}</span>
+        <span class="discount-badge">{{ discount_percent }}% OFF</span>
+        {% endif %}
+      </div>
+
+      {% if previous_price and previous_price != current_price %}
+      <p style="color: #22c55e; font-weight: 500;">
+        Price dropped from ${{ previous_price }} to ${{ current_price }}
+        (Save ${{ price_drop_amount }})
+      </p>
+      {% endif %}
+
+      <a href="{{ product_url }}" class="cta-button">View Product</a>
+    </div>
+
+    <div class="footer">
+      <p>You're receiving this because you set up a price alert for this product.</p>
+      <p>
+        <a href="{{ unsubscribe_url }}">Manage alerts</a> |
+        <a href="https://perpee.app">Perpee</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>
