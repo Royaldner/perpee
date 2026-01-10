@@ -6,35 +6,32 @@
 
 ## Current Phase
 
-**Phase 4: Agent Core Complete** - All 6 sections implemented. Ready for Phase 5.
+**Phase 5: Automation Complete** - All 5 sections implemented. Ready for Phase 6.
 
 ---
 
 ## Recent Development
 
-### This Session (2026-01-09 Session 6)
+### This Session (2026-01-09 Session 7)
+- **Phase 5 Automation Complete**: All 5 sections implemented
+- Created Self-Healing system with failure detection and LLM-based selector regeneration
+- Created Scheduler system with APScheduler, batch processing, and CRON validation
+- Implemented store health metrics calculation (7-day success rate tracking)
+- Added scheduled jobs: daily scrape, health check, healing cycle, cleanup
+- 83 new tests, 242 total tests passing, lint clean
+- Followed proper git workflow: feature branch → build → test → document → PR
+
+### Previous Session (2026-01-09 Session 6)
 - **Phase 4 Agent Core Complete**: All 6 sections implemented
 - Created PerpeeAgent with Pydantic AI and OpenRouter integration
 - Implemented all 10 agent tools for price monitoring operations
 - Created guardrails system (token tracking, rate limiting, timeouts)
-- Added window-based conversation memory (15 messages)
-- Created prompt templates for agent personality and LLM extraction
 - 42 new tests, 159 total tests passing, lint clean
-- Followed proper git workflow: feature branch → build → test → document → PR
 
 ### Previous Session (2026-01-08 Session 5)
 - **Phase 3 RAG System Complete**: All 5 sections implemented
-- Created RAGService with ChromaDB client and collection management
-- Created EmbeddingService using OpenAI text-embedding-3-small (1536 dims)
-- Implemented ProductSearchService (semantic, hybrid, SQLite fallback)
-- Created IndexSyncService for product CRUD sync operations
-- 30 new tests, 117 total tests passing, lint clean
-
-### Previous Session (2026-01-08 Session 4)
-- **Phase 2 Plan Alignment**: Fixed all deviations from IMPLEMENTATION_PLAN.md
-- Created validators.py and sanitization.py per plan
-- Integrated Crawl4AI native components
-- 87 total tests passing, lint clean
+- Created RAGService with ChromaDB, EmbeddingService with OpenAI
+- Implemented ProductSearchService and IndexSyncService
 
 ---
 
@@ -76,120 +73,63 @@
   - Oracle Cloud compatible (900MB memory limit)
 
 ### Phase 2: Scraper Engine - COMPLETE
-- [x] **2.1 Scraper Core**
-  - ScraperEngine class with async scrape method
-  - Waterfall extraction: JSON-LD -> CSS -> XPath -> LLM
-  - Crawl4AI browser configuration (stealth mode)
-
-- [x] **2.2 Rate Limiting & Concurrency**
-  - Per-store rate limiting
-  - Global rate limit: 10 scrapes/minute
-  - Semaphore-based concurrency (3 concurrent browsers)
-
-- [x] **2.3 Retry Strategy & Block Detection**
-  - Retry matrix implementation
-  - Error categorization (network, timeout, blocked, etc.)
-  - Exponential backoff with jitter
-  - CAPTCHA/login wall detection
-  - Bot detection patterns
-
-- [x] **2.4 Timeout Configuration**
-  - 30s request timeout, 2min operation timeout
-  - Per-store wait_for selectors
-
-- [x] **2.5 Validation & Sanitization**
-  - URL validation, domain whitelist
-  - Private IP blocking (SSRF)
-
-- [x] **2.6 User Agent & Headers**
-  - Realistic browser user agents
-  - Proper Accept/Accept-Language headers
-  - User agent rotation with failure tracking
-
-- [x] **2.7 Scraper Tests**
-  - JSON-LD extraction tests
-  - CSS selector tests
-  - Rate limiter tests
-  - Block detection tests
-  - Retry logic tests
-  - User agent tests
+- [x] **2.1 Scraper Core** - ScraperEngine with waterfall extraction
+- [x] **2.2 Rate Limiting & Concurrency** - Per-store and global limits
+- [x] **2.3 Retry Strategy & Block Detection** - Error categorization, CAPTCHA detection
+- [x] **2.4 Timeout Configuration** - 30s request, 2min operation
+- [x] **2.5 Validation & Sanitization** - URL validation, SSRF protection
+- [x] **2.6 User Agent & Headers** - Realistic browser headers, rotation
+- [x] **2.7 Scraper Tests** - 37 unit tests
 
 ### Phase 3: RAG System - COMPLETE
-- [x] **3.1 ChromaDB Setup**
-  - RAGService class with client management
-  - In-memory mode (testing) and persistent mode (production)
-  - Collection management with cosine similarity
-  - Metadata sanitization for ChromaDB
-
-- [x] **3.2 Embeddings**
-  - EmbeddingService with OpenAI text-embedding-3-small
-  - 1536-dimensional embeddings
-  - Batch embedding with automatic chunking
-  - Tenacity retries with exponential backoff
-
-- [x] **3.3 Search Implementation**
-  - Semantic search using ChromaDB
-  - Hybrid search (embedding + SQLite enrichment)
-  - SQLite LIKE fallback when ChromaDB unavailable
-  - Metadata filtering (store, price, stock)
-
-- [x] **3.4 Index Synchronization**
-  - IndexSyncService for CRUD operations
-  - Smart sync based on changed fields
-  - Bulk index/remove operations
-  - Re-embed on name/brand change
-
-- [x] **3.5 RAG Tests**
-  - RAGService tests (10 tests)
-  - Embedding tests (6 tests)
-  - Search tests (9 tests)
-  - Sync tests (3 tests)
-  - Integration tests (2 tests)
+- [x] **3.1 ChromaDB Setup** - RAGService with collection management
+- [x] **3.2 Embeddings** - EmbeddingService with OpenAI text-embedding-3-small
+- [x] **3.3 Search Implementation** - Semantic, hybrid, SQLite fallback
+- [x] **3.4 Index Synchronization** - IndexSyncService for CRUD sync
+- [x] **3.5 RAG Tests** - 30 unit tests
 
 ### Phase 4: Agent Core - COMPLETE
-- [x] **4.1 Agent Configuration**
-  - PerpeeAgent class with Pydantic AI
-  - OpenRouter model configuration (primary + fallbacks)
-  - System prompt from `config/prompts/system.txt`
-  - Conversation memory (window-based, 15 messages)
+- [x] **4.1 Agent Configuration** - PerpeeAgent with Pydantic AI, OpenRouter
+- [x] **4.2 Agent Tools Implementation** - All 10 tools (scrape, search, alert, etc.)
+- [x] **4.3 Tool Dependencies** - AgentDependencies for service injection
+- [x] **4.4 Guardrails** - Token tracking, rate limiting, timeouts
+- [x] **4.5 Prompt Templates** - system.txt, scan_website.txt, extract_product.txt
+- [x] **4.6 Agent Tests** - 42 unit tests
 
-- [x] **4.2 Agent Tools Implementation**
-  - `scrape_product(url)` - Extract product data, save to DB
-  - `scan_website(url)` - Analyze unknown site structure
-  - `search_products(query, store?)` - RAG search
-  - `web_search(query)` - DuckDuckGo product search
-  - `get_price_history(product_id, days?)` - Query history
-  - `create_schedule(product_id, cron)` - Set monitoring
-  - `set_alert(product_id, alert_type, target_value?)` - Configure alert
-  - `compare_prices(canonical_id)` - Cross-store comparison
-  - `list_products(store?, limit?)` - List tracked products
-  - `remove_product(product_id)` - Soft delete product
+### Phase 5: Automation - COMPLETE
+- [x] **5.1 Self-Healing Module**
+  - `FailureDetector` - Classify errors (parse, structure, validation, network)
+  - `SelectorRegenerator` - LLM-based CSS selector regeneration
+  - `SelfHealingService` - Orchestrate healing cycles with retry limits
+  - `StoreHealthCalculator` - 7-day success rate metrics per store
+  - Healable categories: structure_change, parse_failure, selector_failed
 
-- [x] **4.3 Tool Dependencies**
-  - AgentDependencies dataclass for service injection
-  - Factory method with default service creation
+- [x] **5.2 Scheduler Setup**
+  - `SchedulerService` with APScheduler AsyncIOScheduler
+  - MemoryJobStore (SQLAlchemy job store available for production)
+  - Missed job handling with coalesce and grace time
+  - Job management (add, remove, pause, resume, reschedule)
 
-- [x] **4.4 Guardrails**
-  - DailyTokenTracker (100k tokens/day)
-  - LLMRateLimiter (30 requests/minute)
-  - InputValidator (token estimation, truncation)
-  - with_timeout decorator (operation timeout)
+- [x] **5.3 Batch Processing**
+  - `BatchProcessor` groups products by store domain
+  - Browser session reuse per store
+  - Respects per-store rate limits
+  - Concurrent store processing with semaphore control
 
-- [x] **4.5 Prompt Templates**
-  - `system.txt` - Main agent personality
-  - `scan_website.txt` - Website analysis prompt
-  - `extract_product.txt` - LLM extraction prompt
+- [x] **5.4 Schedule Triggers**
+  - CRON expression parsing with croniter
+  - Minimum interval enforcement (24h MVP)
+  - Schedule hierarchy: product > store > system (default 6 AM UTC)
+  - `get_effective_schedule()` for hierarchy resolution
 
-- [x] **4.6 Agent Tests**
-  - Guardrails tests (14 tests)
-  - Conversation memory tests (4 tests)
-  - Tool result types tests (6 tests)
-  - Dependencies tests (2 tests)
-  - Agent response tests (2 tests)
-  - System prompt tests (2 tests)
-  - Integration tests (2 tests)
-  - Edge case tests (4 tests)
-  - Additional tests (6 tests)
+- [x] **5.5 Automation Tests**
+  - Failure detection tests (15 tests)
+  - Selector regeneration tests (11 tests)
+  - Self-healing service tests (8 tests)
+  - Store health tests (9 tests)
+  - Scheduler service tests (20 tests)
+  - Batch processing tests (9 tests)
+  - CRON trigger tests (11 tests)
 
 ### Documentation
 - [x] PRD PERPEE.md - Product requirements
@@ -203,37 +143,32 @@
 
 ## In Progress
 
-Nothing currently in progress. Ready for Phase 5.
+Nothing currently in progress. Ready for Phase 6.
 
 ---
 
 ## Next Steps
 
-### Phase 5: Automation (Self-Healing & Scheduler)
-1. **5.1 Self-Healing Module**
-   - Failure classification (parse_failure, price_validation, structure_change)
-   - Track consecutive failures per product
-   - LLM-based selector regeneration
+### Phase 6: Notifications
+1. **6.1 Email Service**
+   - Resend integration for transactional email
+   - Email templates (price drop, back in stock, alert triggered)
+   - Rate limiting for email sends
 
-2. **5.2 Scheduler Setup**
-   - APScheduler AsyncIOScheduler configuration
-   - SQLAlchemy job store for persistence
-   - Missed job handling
+2. **6.2 Alert Evaluation**
+   - Alert trigger logic (target_price, percent_drop, any_change, back_in_stock)
+   - Notification deduplication
+   - Alert cooldown periods
 
-3. **5.3 Batch Processing**
-   - Group products by store
-   - Reuse browser session per store
-   - Respect per-store rate limits
+3. **6.3 Notification Queue**
+   - Queue processing for bulk notifications
+   - Retry logic for failed sends
+   - Delivery tracking
 
-4. **5.4 Schedule Triggers**
-   - CRON expression parsing and validation
-   - Minimum interval enforcement (24h MVP)
-   - Schedule hierarchy: product > store > system
-
-5. **5.5 Automation Tests**
-   - Failure detection tests
-   - Selector regeneration tests
-   - Job scheduling tests
+4. **6.4 Notification Tests**
+   - Email service tests
+   - Alert evaluation tests
+   - Queue processing tests
 
 ---
 
@@ -251,7 +186,8 @@ None at this time.
 | Phase 2 | 37 tests | All passing |
 | Phase 3 | 30 tests | All passing |
 | Phase 4 | 42 tests | All passing |
-| **Total** | **159 tests** | **All passing** |
+| Phase 5 | 83 tests | All passing |
+| **Total** | **242 tests** | **All passing** |
 
 ---
 
@@ -270,6 +206,10 @@ None at this time.
 | Agent framework | Pydantic AI | Type-safe, OpenRouter compatible |
 | Token budget | 100k/day | OpenRouter free tier limits |
 | Conversation memory | Window (15 msgs) | Balance context vs tokens |
+| Job store | MemoryJobStore (MVP) | SQLAlchemy available for production scale |
+| Healing threshold | 3 consecutive failures | Balance sensitivity vs noise |
+| Health window | 7 days | Recent success rate tracking |
+| Min schedule interval | 24 hours | Prevent abuse, save resources |
 
 ---
 
@@ -280,7 +220,8 @@ None at this time.
 - **PR #1**: Phase 1 Foundation (merged)
 - **PR #2**: Phase 2 Scraper Engine (merged)
 - **PR #3**: Phase 3 RAG System (merged)
-- **PR #4**: Phase 4 Agent Core (pending)
+- **PR #4**: Phase 4 Agent Core (merged)
+- **PR #5**: Phase 5 Automation (pending)
 
 ---
 
@@ -293,21 +234,20 @@ None at this time.
 | `backend/src/core/security.py` | URL/SSRF/XSS utilities |
 | `backend/config/stores_seed.py` | P0 store configurations |
 | `backend/config/settings.py` | Pydantic Settings |
-| `backend/src/scraper/engine.py` | Main scraper engine with MemoryAdaptiveDispatcher |
-| `backend/src/scraper/strategies.py` | Extraction strategies (JSON-LD, CSS, XPath, LLM) |
-| `backend/src/scraper/rate_limiter.py` | Rate limiting + Crawl4AI RateLimiter |
-| `backend/src/scraper/block_detection.py` | Block detection |
-| `backend/src/scraper/validators.py` | URL validation, SSRF protection |
-| `backend/src/scraper/sanitization.py` | Content sanitization, XSS prevention |
-| `backend/src/scraper/robots.py` | Robots.txt + Crawl4AI native integration |
-| `backend/src/rag/service.py` | RAGService with ChromaDB client |
-| `backend/src/rag/embeddings.py` | EmbeddingService with OpenAI |
-| `backend/src/rag/search.py` | ProductSearchService (semantic, hybrid, fallback) |
-| `backend/src/rag/sync.py` | IndexSyncService for CRUD sync |
+| `backend/src/scraper/engine.py` | Main scraper engine |
+| `backend/src/scraper/strategies.py` | Extraction strategies |
+| `backend/src/rag/service.py` | RAGService with ChromaDB |
+| `backend/src/rag/search.py` | ProductSearchService |
 | `backend/src/agent/agent.py` | PerpeeAgent with Pydantic AI |
 | `backend/src/agent/tools.py` | All 10 agent tools |
 | `backend/src/agent/guardrails.py` | Token/rate limits, timeouts |
-| `backend/src/agent/dependencies.py` | Service injection |
-| `backend/config/prompts/system.txt` | Agent system prompt |
+| `backend/src/healing/detector.py` | Failure classification |
+| `backend/src/healing/regenerator.py` | LLM selector regeneration |
+| `backend/src/healing/service.py` | SelfHealingService |
+| `backend/src/healing/health.py` | Store health metrics |
+| `backend/src/scheduler/service.py` | APScheduler service |
+| `backend/src/scheduler/jobs.py` | Scheduled job definitions |
+| `backend/src/scheduler/batching.py` | Batch processing by store |
+| `backend/src/scheduler/triggers.py` | CRON utilities |
 | `IMPLEMENTATION_PLAN.md` | Task breakdown by phase |
 | `referrence/TECHNICAL_SPEC PERPEE.md` | Detailed specs |

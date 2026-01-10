@@ -227,3 +227,49 @@ class IndexSyncError(RAGError):
     """Index synchronization failed."""
 
     pass
+
+
+# ===========================================
+# Healing Exceptions
+# ===========================================
+
+
+class HealingError(PerpeeError):
+    """Base exception for self-healing errors."""
+
+    pass
+
+
+class SelectorRegenerationError(HealingError):
+    """Selector regeneration failed."""
+
+    pass
+
+
+class HealingLimitExceededError(HealingError):
+    """Maximum healing attempts exceeded."""
+
+    pass
+
+
+# ===========================================
+# Scheduler Exceptions
+# ===========================================
+
+
+class SchedulerError(PerpeeError):
+    """Base exception for scheduler errors."""
+
+    pass
+
+
+class InvalidCronError(SchedulerError):
+    """Invalid CRON expression."""
+
+    pass
+
+
+class ScheduleConflictError(SchedulerError):
+    """Schedule conflict detected."""
+
+    pass

@@ -1,0 +1,69 @@
+Analyze this e-commerce webpage HTML and generate CSS selectors for product data extraction.
+
+## Required Fields
+
+1. **Price Selectors**
+   - Target the current/sale price (not original/MSRP)
+   - Handle currency symbols ($, CAD)
+   - Provide 2-4 fallback selectors
+
+2. **Name Selectors**
+   - Product title/name
+   - Usually h1 or main heading
+   - Provide 2-3 fallback selectors
+
+3. **Availability Selectors**
+   - In-stock/out-of-stock indicator
+   - "Add to Cart" button presence
+   - Include in_stock_patterns for text matching
+
+## Optional Fields
+
+4. **Image Selectors** - Main product image URL
+5. **Original Price Selectors** - MSRP, "Was" price, strikethrough price
+6. **Wait For Selector** - Element to wait for before extraction (main content)
+
+## Best Practices
+
+- Prefer semantic selectors: data-*, itemprop, aria-*, id
+- Avoid fragile selectors: nth-child, deeply nested paths
+- Use class names that describe content, not styling
+- Provide multiple fallbacks in order of reliability
+
+## Response Format
+
+Return ONLY valid JSON:
+
+```json
+{
+  "selectors": {
+    "price": {
+      "css": ["[data-testid='price']", ".product-price", "[itemprop='price']"]
+    },
+    "name": {
+      "css": ["h1[itemprop='name']", ".product-title h1", "#product-name"]
+    },
+    "availability": {
+      "css": ["[data-testid='add-to-cart']", ".availability-status"],
+      "in_stock_patterns": ["in stock", "add to cart", "available"]
+    },
+    "image": {
+      "css": ["[data-testid='product-image'] img", ".product-gallery img"]
+    },
+    "original_price": {
+      "css": [".was-price", "[data-testid='original-price']"]
+    },
+    "wait_for": "[data-testid='product-container']",
+    "json_ld": true
+  },
+  "confidence": 0.85,
+  "notes": "Brief explanation of why these selectors were chosen"
+}
+```
+
+## Confidence Score Guidelines
+
+- 0.9-1.0: Clear semantic selectors, well-structured HTML
+- 0.7-0.9: Good selectors, some fallbacks needed
+- 0.5-0.7: Moderate confidence, fragile selectors
+- Below 0.5: Low confidence, HTML structure unclear
