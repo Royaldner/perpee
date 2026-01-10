@@ -1,0 +1,7 @@
+export { Alerts } from "./Alerts"
+export { Dashboard } from "./Dashboard"
+export { ProductDetail } from "./ProductDetail"
+export { Products } from "./Products"
+export { Schedules } from "./Schedules"
+export { Settings } from "./Settings"
+export { Stores } from "./Stores"
